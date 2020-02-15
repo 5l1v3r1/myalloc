@@ -6,18 +6,19 @@ struct obj{
     void* real_space;
 };
 
-struct objlist{
+struct objstack{
     int size;
-    int freecount;
-    struct obj* freeobj;
-    struct obj* map[ENTRY];
+    int index;
+    struct obj* stack[ENTRY];
 };
 
 static struct objlist* hashlist[MAXSIZE];
 
 void * __mymalloc(int size);
 void* hugealloc(int size);
-void replace_freeobj(struct objlist* p);
+struct obj* stack_top(struct objstack* s);
+struct obj* stack_pop(struct objstack* s);
+int stack_push(struct objstack* s, struct obj* target);
 
 extern void * mymalloc(int size);
 extern int myfree(void* target);

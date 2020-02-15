@@ -4,7 +4,7 @@
 int test(int* ptr, int size);
 
 int main(){
-    int* ptr, ptr2;
+    int *ptr, *ptr2;
 
     ptr = (int*)mymalloc(sizeof(int)*10);
     test(ptr, 10);
