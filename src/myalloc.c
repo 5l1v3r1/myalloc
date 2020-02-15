@@ -7,26 +7,22 @@ void * __mymalloc(int size){
     void* ret;
     p = hashlist[size];
     if(p == NULL){
-        printf("yeah\n");
         // alloc new obj and init and return
         p = (struct objstack*)malloc(sizeof(struct objstack));
         for(int i = 0; i< ENTRY; i++){
-            p->stack[i] = (struct obj*)malloc(sizeof(struct obj));
-            p->stack[i]->real_space = malloc(size);
+            p->stack[i] = malloc(size);
         }
         p->size = ENTRY;
         hashlist[size] = p;
     }
 
     if(p->size == 0){
-        //This size is full. Try later.
-        return 0;
+        //This size is empty. Try later.
+        return NULL;
     }
     else{
-        struct obj* retobj = stack_pop(p);
+        ret = stack_pop(p);
         --p->size;
-        ret = retobj->real_space;
-        retobj->free = 0;
         return ret;
     }
 }
