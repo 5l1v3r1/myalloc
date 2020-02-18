@@ -1,23 +1,15 @@
 #define MAXSIZE 4096
 #define ENTRY 1024
 
-/*
 struct obj{
-    int free;
     void* real_space;
+    int size;
 };
 
 struct objstack{
-    int size;
+    int stacksize;
     int index;
     struct obj* stack[ENTRY];
-};
-*/
-
-struct objstack{
-    int size;
-    int index;
-    void* stack[ENTRY];
 };
 
 static struct objlist* hashlist[MAXSIZE];
