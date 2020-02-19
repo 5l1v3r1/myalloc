@@ -7,11 +7,9 @@ struct objstack{
     void* stack[ENTRY];
 };
 
-static struct objstack* hashlist[MAXSIZE];
-
 void * __mymalloc(int size);
 void* hugealloc(int size);
-void* hugefree(void* target);
+int hugefree(void* target);
 void* stack_top(struct objstack* s);
 void* stack_pop(struct objstack* s);
 int stack_push(struct objstack* s, void* target);

@@ -2,6 +2,7 @@
 #include <stdio.h>
 #include "myalloc.h"
 
+static struct objstack* hashlist[MAXSIZE];
 
 int __myfree(void* target, int size){
     struct objstack* p;
@@ -82,6 +83,6 @@ void* hugealloc(int size){
     //#TODO
 }
 
-void* hugefree(void* target){
+int hugefree(void* target){
     //#TODO
 }
