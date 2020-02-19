@@ -4,15 +4,14 @@
 int test(int* ptr, int size);
 
 int main(){
-    int *ptr, *ptr2;
-
-    ptr = (int*)mymalloc(sizeof(int)*10);
-    test(ptr, 10);
-
-    ptr2 = (int*)mymalloc(sizeof(int)*10);
-    test(ptr2, 10);
-
-    myfree(ptr);
+    int *ptr[ENTRY];
+    for(int i = 0; i<ENTRY; i++){
+        ptr[i] = (int*)mymalloc(sizeof(int)*10);
+        test(ptr[i], 10);
+    }
+    for(int i = 0; i<ENTRY; i++){
+        myfree(ptr[i]);
+    }
 
 }
 
@@ -23,7 +22,7 @@ int test(int* ptr, int size){
         return -1;
     }
     else{
-        printf("%x is address.\n", ptr);
+        printf("%p is address.\n", ptr);
     }
     for(i=0;i<size;++i){
         ptr[i] = i;

@@ -3,35 +3,45 @@
 #include "myalloc.h"
 
 
-int myfree(void* target){
-    int size = *(int*)(&target + 4);
-    printf("free size:%d\n", size);
+int __myfree(void* target, int size){
+    struct objstack* p;
+
+    p = hashlist[size];
+    if(!stack_push(p, target))
+        return 0;
+    return 1;
 }
 
+int myfree(void* target){
+    int size = *(int*)(target - 4);
+    if(size > MAXSIZE)
+        return hugefree(target - 4);
+    else
+        return __myfree(target - 4, size);
+    
+}
 
 void * __mymalloc(int size){
     struct objstack* p;
-    struct obj* ret;
+    void* ret;
     p = hashlist[size];
     if(p == NULL){
         // alloc new obj and init and return
         p = (struct objstack*)malloc(sizeof(struct objstack));
         for(int i = 0; i< ENTRY; i++){
-            p->stack[i] = (struct obj*)malloc(sizeof(struct obj));
-            p->stack[i]->real_space = malloc(size);
+            p->stack[i] = malloc(size+4);
+            *(int*)p->stack[i] = size;
         }
         p->index = 0;
         p->stacksize = ENTRY;
         hashlist[size] = p;
     }
     ret = stack_pop(p);
-    if(ret == NULL){
-        //This size is empty. Try later.
+    //The stack is empty. Try later.
+    if(ret == NULL)
         return NULL;
-    }
-    else{
-        return ret->real_space;
-    }
+    else
+        return ret+4;
 }
 
 void* mymalloc(int size){
@@ -43,18 +53,18 @@ void* mymalloc(int size){
     }
 }
 
-struct obj* stack_top(struct objstack* s){
+void* stack_top(struct objstack* s){
     return s->stack[s->index];
 }
 
-struct obj* stack_pop(struct objstack* s){
+void* stack_pop(struct objstack* s){
     if(s->stacksize == 0)
         return NULL;
     --s->stacksize;
     return s->stack[s->index++];
 }
 
-int stack_push(struct objstack* s, struct obj* target){
+int stack_push(struct objstack* s, void* target){
     if(s->stacksize == ENTRY){
         return 0;
     }
@@ -69,5 +79,9 @@ int stack_push(struct objstack* s, struct obj* target){
 }
 
 void* hugealloc(int size){
+    //#TODO
+}
+
+void* hugefree(void* target){
     //#TODO
 }
