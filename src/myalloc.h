@@ -7,7 +7,7 @@ struct objstack{
     void* stack[ENTRY];
 };
 
-static struct objlist* hashlist[MAXSIZE];
+static struct objstack* hashlist[MAXSIZE];
 
 void * __mymalloc(int size);
 void* hugealloc(int size);
